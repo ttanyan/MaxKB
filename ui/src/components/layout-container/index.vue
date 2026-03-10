@@ -42,15 +42,19 @@ const props = defineProps({
   resizable: Boolean,
   minLeftWidth: {
     type: Number,
-    default: 260,
+    default: 280,
   },
   maxLeftWidth: {
     type: Number,
     default: 400,
   },
+  isCollapse: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const isCollapse = ref(true)
+const isCollapse = ref(props.isCollapse)
 const leftWidth = ref(props.minLeftWidth)
 const isResizing = ref(false)
 

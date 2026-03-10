@@ -1,8 +1,5 @@
 <template>
-  <LayoutContainer class="mindmap-container">
-    <template #left>
-      <h4 class="p-12-16 pb-0 mt-12">思维导图</h4>
-    </template>
+  <div class="mindmap-container">
     <div class="mindmap-content">
       <iframe
         :src="mindmapUrl"
@@ -10,11 +7,10 @@
         title="思维导图"
       ></iframe>
     </div>
-  </LayoutContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
-import LayoutContainer from '@/components/layout-container/index.vue'
 import { ref, onMounted } from 'vue'
 import systemConfigApi from '@/api/system-settings/system-config'
 

@@ -26,6 +26,28 @@
           <h1 style="font-size: 18px; font-weight: 600; margin: 0;">AI-RAG</h1>
         </div>
         <div style="display: flex; align-items: center;">
+          <span class="flex align-center" v-if="currentRecordList.length">
+            <el-dropdown class="ml-8">
+              <AppIcon
+                iconName="app-export"
+                class="cursor"
+                :title="$t('chat.exportRecords')"
+              ></AppIcon>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="exportMarkdown"
+                    >{{ $t('common.export') }} Markdown</el-dropdown-item
+                  >
+                  <el-dropdown-item @click="exportHTML"
+                    >{{ $t('common.export') }} HTML</el-dropdown-item
+                  >
+                  <el-dropdown-item @click="openPDFExport"
+                    >{{ $t('common.export') }} PDF</el-dropdown-item
+                  >
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </span>
         </div>
       </div>
     </div>
@@ -119,26 +141,6 @@
               <span v-if="paginationConfig.total" class="lighter">
                 {{ paginationConfig.total }} {{ $t('chat.question_count') }}
               </span>
-              <el-dropdown class="ml-8">
-                <AppIcon
-                  iconName="app-export"
-                  class="cursor"
-                  :title="$t('chat.exportRecords')"
-                ></AppIcon>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item @click="exportMarkdown"
-                      >{{ $t('common.export') }} Markdown</el-dropdown-item
-                    >
-                    <el-dropdown-item @click="exportHTML"
-                      >{{ $t('common.export') }} HTML</el-dropdown-item
-                    >
-                    <el-dropdown-item @click="openPDFExport"
-                      >{{ $t('common.export') }} PDF</el-dropdown-item
-                    >
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
             </span>
           </div>
         </template>

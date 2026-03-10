@@ -1,5 +1,5 @@
 <template>
-  <LayoutContainer showCollapse class="model-manage">
+  <LayoutContainer showCollapse :isCollapse="true" class="model-manage">
     <template #left>
       <h4 class="p-12-16 pb-0 mt-12">{{ $t('views.model.provider') }}</h4>
       <ProviderComponent
