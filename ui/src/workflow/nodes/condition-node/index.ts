@@ -45,13 +45,14 @@ class ConditionModel extends AppNodeModel {
       type: 'left'
     })
 
-    if (branch_condition_list) {
-      for (let index = 0; index < branch_condition_list.length; index++) {
-        const element = branch_condition_list[index]
-        const h = get_up_index_height(branch_condition_list, index)
+    const conditionList = Array.isArray(branch_condition_list) ? branch_condition_list : []
+    if (conditionList.length > 0) {
+      for (let index = 0; index < conditionList.length; index++) {
+        const element = conditionList[index]
+        const h = get_up_index_height(conditionList, index)
         anchors.push({
           x: x + width / 2 - 10,
-          y: showNode ? y - height / 2 + 75 + h + element.height / 2 : y - 15,
+          y: showNode ? y - height / 2 + 75 + h + (element.height || 0) / 2 : y - 15,
           id: `${id}_${element.id}_right`,
           type: 'right'
         })

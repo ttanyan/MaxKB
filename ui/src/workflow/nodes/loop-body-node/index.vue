@@ -121,13 +121,6 @@ const renderGraphData = (data?: any) => {
     )
 
     initDefaultShortcut(lf.value, lf.value.graphModel)
-    lf.value.graphModel.get_provide = (node: any, graph: any) => {
-      return {
-        getNode: () => node,
-        getGraph: () => graph,
-        workflowMode: WorkflowMode.ApplicationLoop,
-      }
-    }
     lf.value.graphModel.refresh_loop_fields = refresh_loop_fields
     lf.value.graphModel.get_parent_nodes = () => {
       return props.nodeModel.graphModel.nodes

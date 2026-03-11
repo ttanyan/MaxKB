@@ -10,8 +10,13 @@ class LoopBodyNodeView extends AppNode {
   }
   get_up_node_field_list(contain_self: boolean, use_cache: boolean) {
     const loop_node_id = this.props.model.properties.loop_node_id
-    const loop_node = this.props.graphModel.getNodeModelById(loop_node_id)
-    return loop_node.get_up_node_field_list(contain_self, use_cache)
+    if (typeof loop_node_id === 'string') {
+      const loop_node = this.props.graphModel.getNodeModelById(loop_node_id)
+      if (loop_node && typeof loop_node.get_up_node_field_list === 'function') {
+        return loop_node.get_up_node_field_list(contain_self, use_cache)
+      }
+    }
+    return []
   }
 }
 class LoopBodyModel extends AppNodeModel {

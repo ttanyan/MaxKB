@@ -1,5 +1,5 @@
 <template>
-  <div @mousedown="mousedown" class="workflow-node-container p-16" style="overflow: visible">
+  <div class="workflow-node-container p-16" style="overflow: visible">
     <div
       class="step-container app-card p-16"
       :class="{ isSelected: props.nodeModel.isSelected, error: node_status !== 200 }"
@@ -9,10 +9,6 @@
         <div class="flex-between">
           <div
             class="flex align-center"
-            @dragstart.prevent
-            @drag.prevent
-            @dragover.prevent
-            @dragend.prevent
             style="width: 69%"
           >
             <component
@@ -24,7 +20,7 @@
             <h4 class="ellipsis-1 break-all">{{ nodeModel.properties.stepName }}</h4>
           </div>
 
-          <div @mousemove.stop @mousedown.stop @keydown.stop @click.stop>
+          <div>
             <el-button text @click="showNode = !showNode">
               <el-icon class="arrow-icon color-secondary" :class="showNode ? 'rotate-180' : ''"
                 ><ArrowDownBold />
@@ -78,7 +74,7 @@
           </div>
         </div>
         <el-collapse-transition>
-          <div @mousedown.stop @keydown.stop @click.stop v-show="showNode" class="mt-16">
+          <div v-show="showNode" class="mt-16">
             <el-alert
               v-if="node_status != 200"
               class="mb-16"
@@ -124,9 +120,6 @@
     <el-collapse-transition>
       <DropdownMenu
         v-if="showAnchor"
-        @mousemove.stop
-        @mousedown.stop
-        @click.stop
         @wheel="handleWheel"
         :show="showAnchor"
         :id="id"
@@ -172,16 +165,18 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, provide } from 'vue'
 import DropdownMenu from '@/views/application-workflow/component/DropdownMenu.vue'
 import { set } from 'lodash'
 import { iconComponent } from '../icons/utils'
 import { copyClick } from '@/utils/clipboard'
-import { WorkflowType } from '@/enums/application'
+import { WorkflowType, WorkflowMode } from '@/enums/application'
 import { MsgError, MsgConfirm } from '@/utils/message'
 import type { FormInstance } from 'element-plus'
 import { t } from '@/locales'
 import { useRoute } from 'vue-router'
+
+provide('workflowMode', WorkflowMode.Application)
 const route = useRoute()
 const {
   params: { id },

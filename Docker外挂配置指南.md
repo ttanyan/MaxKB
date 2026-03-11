@@ -27,7 +27,7 @@
 
 ### 1.3 镜像打包
 
-1. docker build -f installer/Dockerfile -t maxkb:latest 
+1. docker build -f installer/Dockerfile -t maxkb:latest .
 
 ## 2. 数据库外挂配置
 

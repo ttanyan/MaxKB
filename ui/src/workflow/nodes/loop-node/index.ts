@@ -25,8 +25,8 @@ class LoopModel extends AppNodeModel {
     const showNode = this.properties.showNode === undefined ? true : this.properties.showNode
     const anchors: any = []
 
-    if (this.type !== WorkflowType.Base) {
-      if (this.type !== WorkflowType.Start) {
+    if (this.type && this.type !== WorkflowType.Base.toString()) {
+      if (this.type !== WorkflowType.Start.toString()) {
         anchors.push({
           x: x - width / 2 + 10,
           y: showNode ? y : y - 15,

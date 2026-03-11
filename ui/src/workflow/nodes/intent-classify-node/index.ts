@@ -46,12 +46,13 @@ class IntentModel extends AppNodeModel {
             type: 'left'
         })
 
-        if (branch_condition_list) {
+        const conditionList = Array.isArray(branch_condition_list) ? branch_condition_list : []
+        if (conditionList.length > 0) {
 
             const FORM_ITEMS_HEIGHT = 397  // 上方表单占用高度
             
-            for (let index = 0; index < branch_condition_list.length; index++) {
-                const element = branch_condition_list[index]
+            for (let index = 0; index < conditionList.length; index++) {
+                const element = conditionList[index]
                
                 anchors.push({
                 x: x + width / 2 - 10,

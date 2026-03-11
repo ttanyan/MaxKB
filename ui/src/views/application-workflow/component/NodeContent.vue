@@ -20,7 +20,7 @@
             class="list-item flex align-center border border-r-6 p-8-12 cursor"
             style="width: calc(50% - 6px)"
             @click.stop="emit('clickNodes', item)"
-            @mousedown.stop="emit('onmousedown', item)"
+            @mousedown="emit('onmousedown', item, $event)"
           >
             <el-avatar
               v-if="isAppIcon(item?.icon)"
@@ -81,7 +81,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'clickNodes', item: any): void
-  (e: 'onmousedown', item: any): void
+  (e: 'onmousedown', item: any, event: MouseEvent): void
 }>()
 
 const filterText = ref('')

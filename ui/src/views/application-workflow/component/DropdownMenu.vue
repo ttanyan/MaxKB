@@ -38,7 +38,7 @@
                         class="list-item flex align-center border border-r-6 p-8-12 cursor"
                         style="width: calc(50% - 6px)"
                         @click.stop="clickNodes(item)"
-                        @mousedown.stop="onmousedown(item)"
+                        @mousedown="onmousedown(item, undefined, undefined, $event)"
                       >
                         <component
                           :is="iconComponent(`${item.type}-icon`)"
@@ -90,7 +90,7 @@
             <NodeContent
               :list="toolList"
               @clickNodes="(val: any) => clickNodes(toolLibNode, val, 'tool')"
-              @onmousedown="(val: any) => onmousedown(toolLibNode, val, 'tool')"
+              @onmousedown="(val: any, event: MouseEvent) => onmousedown(toolLibNode, val, 'tool', event)"
             />
           </el-scrollbar>
         </LayoutContainer>
@@ -112,7 +112,7 @@
             <NodeContent
               :list="applicationList"
               @clickNodes="(val: any) => clickNodes(applicationNode, val, 'application')"
-              @onmousedown="(val: any) => onmousedown(applicationNode, val, 'application')"
+              @onmousedown="(val: any, event: MouseEvent) => onmousedown(applicationNode, val, 'application', event)"
             />
           </el-scrollbar>
         </LayoutContainer>
@@ -208,7 +208,7 @@ function clickNodes(item: any, data?: any, type?: string) {
   emit('clickNodes', item)
 }
 
-function onmousedown(item: any, data?: any, type?: string) {
+function onmousedown(item: any, data?: any, type?: string, event?: MouseEvent) {
   if (data) {
     item['properties']['stepName'] = data.name
     if (type == 'tool') {
@@ -239,7 +239,7 @@ function onmousedown(item: any, data?: any, type?: string) {
       }
     }
   }
-  props.workflowRef?.onmousedown(item)
+  props.workflowRef?.onmousedown(item, event)
   emit('onmousedown', item)
 }
 

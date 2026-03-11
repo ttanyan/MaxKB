@@ -1,5 +1,5 @@
 <template>
-  <div @mousedown="mousedown" class="workflow-node-container p-16" style="overflow: visible">
+  <div class="workflow-node-container p-16" style="overflow: visible">
     <div
       class="step-container app-card p-16"
       :class="{ isSelected: props.nodeModel.isSelected, error: node_status !== 200 }"
@@ -27,7 +27,7 @@
           </el-button>
         </div>
         <el-collapse-transition>
-          <div @mousedown.stop @keydown.stop @click.stop v-show="showNode" class="mt-16">
+          <div v-show="showNode" class="mt-16">
             <el-alert
               v-if="node_status != 200"
               class="mb-16"

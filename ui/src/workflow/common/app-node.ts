@@ -62,26 +62,26 @@ class AppNode extends HtmlResize.view {
   }
   get_node_field_list() {
     const result = []
-    if (this.props.model.type === 'start-node') {
+    if (this.props.model.type && this.props.model.type === 'start-node') {
       result.push({
         value: 'global',
         label: t('views.applicationWorkflow.variable.global'),
         type: 'global',
-        children: this.props.model.properties?.config?.globalFields || [],
+        children: (this.props.model.properties as any)?.config?.globalFields || [],
       })
       result.push({
         value: 'chat',
         label: t('views.applicationWorkflow.variable.chat'),
         type: 'chat',
-        children: this.props.model.properties?.config?.chatFields || [],
+        children: (this.props.model.properties as any)?.config?.chatFields || [],
       })
     }
     result.push({
       value: this.props.model.id,
-      icon: this.props.model.properties.node_data?.icon,
+      icon: (this.props.model.properties as any)?.node_data?.icon,
       label: this.props.model.properties.stepName,
       type: this.props.model.type,
-      children: this.props.model.properties?.config?.fields || [],
+      children: (this.props.model.properties as any)?.config?.fields || [],
     })
     return result
   }
@@ -107,10 +107,8 @@ class AppNode extends HtmlResize.view {
       (pre, next) => [...pre, ...next],
       [],
     )
-    const start_node_field_list = (
-      this.props.graphModel.getNodeModelById('start-node') ||
-      this.props.graphModel.getNodeModelById('loop-start-node')
-    ).get_node_field_list()
+    const startNode = this.props.graphModel.getNodeModelById('start-node') || this.props.graphModel.getNodeModelById('loop-start-node')
+    const start_node_field_list = startNode ? startNode.get_node_field_list() : []
     return [...start_node_field_list, ...result]
   }
 
@@ -228,8 +226,8 @@ class AppNode extends HtmlResize.view {
           this.targetId(),
           this.component,
           root,
-          model,
-          graphModel,
+          model as any,
+          graphModel as any,
           undefined,
           this.props.graphModel.get_provide,
         )
@@ -334,8 +332,10 @@ class AppNodeModel extends HtmlResize.model {
     const style = super.getAnchorStyle(anchorInfo)
     if (anchorInfo.type === 'left') {
       style.fill = 'red'
-      style.hover.fill = 'transparent'
-      style.hover.stroke = 'transpanrent'
+      if (style.hover) {
+        style.hover.fill = 'transparent'
+        style.hover.stroke = 'transpanrent'
+      }
       style.className = 'lf-hide-default'
     } else {
       style.fill = 'green'
@@ -414,8 +414,8 @@ class AppNodeModel extends HtmlResize.model {
     const showNode = this.properties.showNode === undefined ? true : this.properties.showNode
     const anchors: any = []
 
-    if (this.type !== WorkflowType.Base) {
-      if (![WorkflowType.Start, WorkflowType.LoopStartNode.toString()].includes(this.type)) {
+    if (this.type && this.type !== WorkflowType.Base.toString()) {
+      if (![WorkflowType.Start.toString(), WorkflowType.LoopStartNode.toString()].includes(this.type)) {
         anchors.push({
           x: x - width / 2 + 10,
           y: showNode ? y : y - 15,

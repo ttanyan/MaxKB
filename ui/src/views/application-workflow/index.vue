@@ -159,7 +159,9 @@ import { ComplexPermission } from '@/utils/permission/type'
 import { EditionConst, PermissionConst, RoleConst } from '@/utils/permission/data'
 import permissionMap from '@/permission'
 import { loadSharedApi } from '@/utils/dynamics-api/shared-api'
+import { WorkflowMode } from '@/enums/application'
 provide('getApplicationDetail', () => detail)
+provide('workflowMode', WorkflowMode.Application)
 const { theme } = useStore()
 const router = useRouter()
 const route = useRoute()

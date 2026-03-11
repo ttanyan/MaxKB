@@ -7,13 +7,13 @@ class LoopStartNode extends AppNode {
   }
   get_node_field_list() {
     const result = []
-    if (this.props.model.type === 'loop-start-node') {
+    if (this.props.model.type && this.props.model.type === 'loop-start-node') {
       result.push({
         value: 'loop',
         label: t('views.applicationWorkflow.variable.loop'),
         type: 'loop',
         children:
-          (this.props.model.properties.loop_input_field_list
+          (Array.isArray(this.props.model.properties.loop_input_field_list)
             ? this.props.model.properties.loop_input_field_list
             : []
           ).map((i: any) => {
@@ -27,9 +27,10 @@ class LoopStartNode extends AppNode {
 
     result.push({
       value: this.props.model.id,
+      icon: (this.props.model.properties as any)?.node_data?.icon,
       label: this.props.model.properties.stepName,
       type: this.props.model.type,
-      children: this.props.model.properties?.config?.fields || [],
+      children: (this.props.model.properties as any)?.config?.fields || [],
     })
 
     return result
