@@ -1,0 +1,1 @@
+import{ay as t,aW as a,aF as n,aI as s,cf as o}from"./admin-PS2JsF4a.js";const r={class:"mindmap-container"},c=t({__name:"index",setup(i){return(d,e)=>(n(),a("div",r,[...e[0]||(e[0]=[s("iframe",{src:"http://10.100.52.76:3000/",style:{width:"100%",height:"100vh",border:"none"},title:"思维导图"},null,-1)])]))}}),p=o(c,[["__scopeId","data-v-bfc48b1a"]]);export{p as default};
