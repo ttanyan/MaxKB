@@ -1,15 +1,6 @@
 <template>
-  <div class="china-mobile-icon" style="display: flex; align-items: center; margin-right: 16px;">
-    <div style="display: flex; align-items: center;">
-      <div style="display: flex; align-items: center;">
-        <div>
-          <div style="font-size: 14px; font-weight: 600; color: #1E71C7;">中国移动</div>
-          <div style="font-size: 12px; color: #1E71C7;">China Mobile</div>
-        </div>
-      </div>
-      <div style="margin: 0 12px; height: 20px; width: 1px; background-color: #E8E8E8;"></div>
-      <div style="font-size: 14px; font-weight: 600; color: #6B47E5;">CMIOT</div>
-    </div>
+  <div class="china-mobile-icon" aria-label="China Mobile">
+    <img src="/aiot-header-logo.png" alt="China Mobile" />
   </div>
 </template>
 
@@ -19,6 +10,20 @@ defineOptions({ name: 'ChinaMobileIcon' })
 
 <style scoped>
 .china-mobile-icon {
-  height: 40px;
+  width: var(--china-mobile-icon-width, 176px);
+  height: var(--china-mobile-icon-height, 22px);
+  /* margin-right: var(--china-mobile-icon-gap, 14px); */
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.china-mobile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 </style>

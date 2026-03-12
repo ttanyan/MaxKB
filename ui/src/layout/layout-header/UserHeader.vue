@@ -5,8 +5,8 @@
     </div>
 
     <div class="flex-between w-full">
-      <div class="ml-24 flex align-center w-120">
-        <ChinaMobileIcon />
+      <div class="ml-24 flex align-center">
+        <ChinaMobileIcon class="user-header-icon" />
         <!-- 企业版: 工作空间下拉框-->
         <el-divider
           class="mr-8"
@@ -65,5 +65,11 @@ function changeWorkspace(item: WorkspaceItem) {
   height: var(--app-header-height);
   box-sizing: border-box;
   padding: var(--app-header-padding);
+}
+
+:deep(.user-header-icon) {
+  --china-mobile-icon-width: 176px;
+  --china-mobile-icon-height: 22px;
+  --china-mobile-icon-gap: 10px;
 }
 </style>

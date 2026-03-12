@@ -21,9 +21,9 @@
   >
     <div class="app-top-bar-container border-b flex-center">
       <div class="flex-between w-full align-center" style="padding: 0 16px;">
-        <div style="display: flex; align-items: center;">
-          <ChinaMobileIcon />
-          <h1 style="font-size: 18px; font-weight: 600; margin: 0;">AI-RAG</h1>
+        <div class="chat-header-brand">
+          <ChinaMobileIcon class="chat-header-icon" />
+          <h1 class="chat-header-title">AI-RAG</h1>
         </div>
         <div style="display: flex; align-items: center;">
           <span class="flex align-center" v-if="currentRecordList.length">
@@ -541,6 +541,25 @@ function closeExecutionDetail() {
   box-sizing: border-box;
   padding: var(--app-header-padding);
   background: var(--app-header-bg-color);
+}
+
+.chat-header-brand {
+  display: flex;
+  align-items: center;
+}
+
+:deep(.chat-header-icon) {
+  --china-mobile-icon-width: 192px;
+  --china-mobile-icon-height: 24px;
+  --china-mobile-icon-gap: 16px;
+}
+
+.chat-header-title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
 
 .chat-pc {

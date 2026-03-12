@@ -2,12 +2,12 @@
   <login-layout v-if="!loading" v-loading="loading">
     <LoginContainer :subTitle="newDefaultSlogan">
       <template #logo>
-        <div style="display: flex; align-items: center; justify-content: center;">
-          <ChinaMobileIcon />
-          <h1 style="font-size: 18px; font-weight: 600; margin: 0; background: linear-gradient(90deg, #6B47E5, #1E71C7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI-RAG</h1>
+        <div class="login-brand">
+          <ChinaMobileIcon class="login-brand-icon" />
+          <h1 class="login-brand-title">AI-RAG</h1>
         </div>
       </template>
-      <h2 class="mb-24" v-if="!showQrCodeTab">{{ loginMode || $t('views.login.title') }}</h2>
+      <h2 class="mb-24" v-if="!showQrCodeTab" >{{ loginMode || $t('views.login.title') }}</h2>
       <div v-if="!showQrCodeTab">
         <el-form
           class="login-form"
@@ -496,6 +496,63 @@ onMounted(() => {
 })
 </script>
 <style lang="scss" scoped>
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+
+  :deep(.china-mobile-icon) {
+    --china-mobile-icon-width: 268px;
+    --china-mobile-icon-height: 34px;
+    --china-mobile-icon-gap: 20px;
+  }
+}
+
+.login-brand-title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  background: linear-gradient(90deg, #6b47e5, #1e71c7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+:deep(.login-title .sub-title .el-text) {
+  font-size: 13px;
+  padding-left: 38px;
+}
+
+@media (max-width: 1400px) {
+  .login-brand {
+    :deep(.china-mobile-icon) {
+      --china-mobile-icon-width: 236px;
+      --china-mobile-icon-height: 30px;
+      --china-mobile-icon-gap: 16px;
+    }
+  }
+
+  .login-brand-title {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .login-brand {
+    :deep(.china-mobile-icon) {
+      --china-mobile-icon-width: 210px;
+      --china-mobile-icon-height: 28px;
+      --china-mobile-icon-gap: 14px;
+    }
+  }
+
+  .login-brand-title {
+    font-size: 30px;
+  }
+}
+
 .login-gradient-divider {
   position: relative;
   text-align: center;
