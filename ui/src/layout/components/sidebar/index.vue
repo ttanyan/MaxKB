@@ -12,35 +12,35 @@
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/application' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
         >
-          AI应用
+          {{ menuText.aiApplication }}
         </router-link>
         <router-link
           to="/mindmap"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/mindmap' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
         >
-          思维导图
+          {{ menuText.mindmap }}
         </router-link>
         <router-link
           to="/knowledge"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/knowledge' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
         >
-          知识库
+          {{ menuText.knowledge }}
         </router-link>
         <router-link
           to="/tool"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/tool' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
         >
-          工具管理
+          {{ menuText.toolManagement }}
         </router-link>
         <router-link
           to="/model"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/model' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
         >
-          模型管理
+          {{ menuText.modelManagement }}
         </router-link>
       </div>
 
@@ -50,7 +50,7 @@
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeSystemMenu === '/system/user' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
         >
-          用户管理
+          {{ menuText.userManagement }}
         </router-link>
 
         <div>
@@ -59,7 +59,7 @@
             :style="activeSystemMenu.startsWith('/system/authorization') ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             @click="toggleResourceAuth"
           >
-            <span>资源授权</span>
+            <span>{{ menuText.resourceAuthorization }}</span>
             <span>{{ resourceAuthExpanded ? '▾' : '▸' }}</span>
           </div>
           <div
@@ -71,28 +71,28 @@
               style="display: block; padding: 8px 16px; border-radius: 8px; text-decoration: none; color: #666; font-size: 13px;"
               :style="activeSystemMenu === '/system/authorization/application' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             >
-              AI应用
+              {{ menuText.aiApplication }}
             </router-link>
             <router-link
               to="/system/authorization/knowledge"
               style="display: block; padding: 8px 16px; border-radius: 8px; text-decoration: none; color: #666; font-size: 13px;"
               :style="activeSystemMenu === '/system/authorization/knowledge' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             >
-              知识库
+              {{ menuText.knowledge }}
             </router-link>
             <router-link
               to="/system/authorization/tool"
               style="display: block; padding: 8px 16px; border-radius: 8px; text-decoration: none; color: #666; font-size: 13px;"
               :style="activeSystemMenu === '/system/authorization/tool' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             >
-              工具管理
+              {{ menuText.toolManagement }}
             </router-link>
             <router-link
               to="/system/authorization/model"
               style="display: block; padding: 8px 16px; border-radius: 8px; text-decoration: none; color: #666; font-size: 13px;"
               :style="activeSystemMenu === '/system/authorization/model' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             >
-              模型管理
+              {{ menuText.modelManagement }}
             </router-link>
           </div>
         </div>
@@ -103,7 +103,7 @@
             :style="activeSystemMenu.startsWith('/system/email') ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             @click="toggleSystemSettings"
           >
-            <span>系统设置</span>
+            <span>{{ menuText.systemSettings }}</span>
             <span>{{ systemSettingsExpanded ? '▾' : '▸' }}</span>
           </div>
           <div
@@ -115,7 +115,7 @@
               style="display: block; padding: 8px 16px; border-radius: 8px; text-decoration: none; color: #666; font-size: 13px;"
               :style="activeSystemMenu === '/system/email' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             >
-              邮件设置
+              {{ menuText.emailSettings }}
             </router-link>
           </div>
         </div>
@@ -131,9 +131,51 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import UserAvatar from '@/layout/layout-header/avatar/index.vue'
 
 const route = useRoute()
+const { locale } = useI18n({ useScope: 'global' })
+
+const menuText = computed(() => {
+  if (locale.value === 'en-US') {
+    return {
+      aiApplication: 'AI Applications',
+      mindmap: 'Mind Map',
+      knowledge: 'Knowledge Base',
+      toolManagement: 'Tool Management',
+      modelManagement: 'Model Management',
+      userManagement: 'User Management',
+      resourceAuthorization: 'Resource Authorization',
+      systemSettings: 'System Settings',
+      emailSettings: 'Email Settings',
+    }
+  }
+  if (locale.value === 'zh-Hant') {
+    return {
+      aiApplication: 'AI應用',
+      mindmap: '思維導圖',
+      knowledge: '知識庫',
+      toolManagement: '工具管理',
+      modelManagement: '模型管理',
+      userManagement: '用戶管理',
+      resourceAuthorization: '資源授權',
+      systemSettings: '系統設定',
+      emailSettings: '郵件設定',
+    }
+  }
+  return {
+    aiApplication: 'AI应用',
+    mindmap: '思维导图',
+    knowledge: '知识库',
+    toolManagement: '工具管理',
+    modelManagement: '模型管理',
+    userManagement: '用户管理',
+    resourceAuthorization: '资源授权',
+    systemSettings: '系统设置',
+    emailSettings: '邮件设置',
+  }
+})
 
 const isSystemManagement = computed(() => {
   const path = route.path

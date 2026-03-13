@@ -1,5 +1,5 @@
 export default {
-  title: 'APP',
+  title: 'AI Applications',
   createApplication: 'Create Simple APP',
   createWorkFlowApplication: 'Create Workflow APP',
   importApplication: 'Import APP',

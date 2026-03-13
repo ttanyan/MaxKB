@@ -1,5 +1,5 @@
 export default {
-  title: '工具',
+  title: '工具管理',
   all: '全部',
   createTool: '创建工具',
   editTool: '编辑工具',
