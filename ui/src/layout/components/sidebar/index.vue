@@ -8,7 +8,6 @@
     <div style="padding: 0 16px;">
       <div v-if="!isSystemManagement" style="display: flex; flex-direction: column; gap: 8px;">
         <router-link
-          v-if="hasMenu('application')"
           to="/application"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/application' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
@@ -16,7 +15,6 @@
           {{ menuText.aiApplication }}
         </router-link>
         <router-link
-          v-if="hasMenu('mindmap')"
           to="/mindmap"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/mindmap' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
@@ -24,7 +22,6 @@
           {{ menuText.mindmap }}
         </router-link>
         <router-link
-          v-if="hasMenu('knowledge')"
           to="/knowledge"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/knowledge' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
@@ -32,7 +29,6 @@
           {{ menuText.knowledge }}
         </router-link>
         <router-link
-          v-if="hasMenu('tool')"
           to="/tool"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/tool' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
@@ -40,7 +36,6 @@
           {{ menuText.toolManagement }}
         </router-link>
         <router-link
-          v-if="hasMenu('model')"
           to="/model"
           style="display: block; padding: 10px 16px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px;"
           :style="activeMainMenu === '/model' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
@@ -105,11 +100,7 @@
         <div>
           <div
             style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-radius: 8px; cursor: pointer;"
-            :style="
-              activeSystemMenu.startsWith('/system/email') || activeSystemMenu.startsWith('/system/setting')
-                ? { backgroundColor: '#e6f0ff', color: '#1890ff' }
-                : {}
-            "
+            :style="activeSystemMenu.startsWith('/system/email') ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             @click="toggleSystemSettings"
           >
             <span>{{ menuText.systemSettings }}</span>
@@ -125,13 +116,6 @@
               :style="activeSystemMenu === '/system/email' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
             >
               {{ menuText.emailSettings }}
-            </router-link>
-            <router-link
-              to="/system/setting/menu"
-              style="display: block; padding: 8px 16px; border-radius: 8px; text-decoration: none; color: #666; font-size: 13px;"
-              :style="activeSystemMenu === '/system/setting/menu' ? { backgroundColor: '#e6f0ff', color: '#1890ff' } : {}"
-            >
-              {{ menuText.menuManagement }}
             </router-link>
           </div>
         </div>
@@ -149,11 +133,9 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import UserAvatar from '@/layout/layout-header/avatar/index.vue'
-import useStore from '@/stores'
 
 const route = useRoute()
 const { locale } = useI18n({ useScope: 'global' })
-const { menuSetting } = useStore()
 
 const menuText = computed(() => {
   if (locale.value === 'en-US') {
@@ -167,7 +149,6 @@ const menuText = computed(() => {
       resourceAuthorization: 'Resource Authorization',
       systemSettings: 'System Settings',
       emailSettings: 'Email Settings',
-      menuManagement: 'Menu Management',
     }
   }
   if (locale.value === 'zh-Hant') {
@@ -181,7 +162,6 @@ const menuText = computed(() => {
       resourceAuthorization: '資源授權',
       systemSettings: '系統設定',
       emailSettings: '郵件設定',
-      menuManagement: '菜單管理',
     }
   }
   return {
@@ -194,7 +174,6 @@ const menuText = computed(() => {
     resourceAuthorization: '资源授权',
     systemSettings: '系统设置',
     emailSettings: '邮件设置',
-    menuManagement: '菜单管理',
   }
 })
 
@@ -213,8 +192,6 @@ const activeMainMenu = computed(() => {
   return '/application'
 })
 
-const hasMenu = (menuId: string) => menuSetting.hasMenu(menuId)
-
 const activeSystemMenu = computed(() => {
   const path = route.path
   if (path.startsWith('/system/user') || path.startsWith('/admin/system/user')) return '/system/user'
@@ -222,9 +199,6 @@ const activeSystemMenu = computed(() => {
     return path.replace('/admin', '')
   }
   if (path.startsWith('/system/email') || path.startsWith('/admin/system/email')) {
-    return path.replace('/admin', '')
-  }
-  if (path.startsWith('/system/setting') || path.startsWith('/admin/system/setting')) {
     return path.replace('/admin', '')
   }
   return '/system/user'
@@ -244,9 +218,7 @@ const toggleSystemSettings = () => {
 }
 
 onMounted(() => {
-  menuSetting.ensureLoaded()
   resourceAuthExpanded.value = false
-  systemSettingsExpanded.value =
-    activeSystemMenu.value.startsWith('/system/email') || activeSystemMenu.value.startsWith('/system/setting')
+  systemSettingsExpanded.value = false
 })
 </script>
