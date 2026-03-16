@@ -1,7 +1,7 @@
 import tool from '@/api/tool/tool'
 
 export default {
-  title: '应用',
+  title: 'AI应用',
   createApplication: '创建简易应用',
   createWorkFlowApplication: '创建高级编排应用',
   importApplication: '导入应用',

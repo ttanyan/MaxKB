@@ -109,6 +109,50 @@ export default {
     enableSSL: '啟用 SSL（如果 SMTP 端口是 465，通常需要啟用 SSL）',
     enableTLS: '啟用 TLS（如果 SMTP 端口是 587，通常需要啟用 TLS）',
   },
+  menu: {
+    title: '菜單管理',
+    userList: '使用者列表',
+    userListTip: '此處僅展示普通使用者。系統管理員預設全部可見，無需在此配置。',
+    searchUserPlaceholder: '搜尋使用者名稱、暱稱或郵箱',
+    currentUserTip: '正在配置使用者：{username}',
+    selectAll: '全選',
+    clearAll: '清空',
+    resetCurrent: '恢復預設',
+    selectedCount: '已顯示菜單',
+    hiddenCount: '已隱藏菜單',
+    previewTitle: '目前預覽',
+    permissionTitle: '菜單權限',
+    permissionTip: '目前僅支援配置左側主導航菜單。',
+    saveSuccess: '菜單權限保存成功',
+    resetSuccess: '已恢復預設菜單',
+    empty: '目前未選擇菜單',
+    menuTree: {
+      mainNavigation: {
+        label: '主導航',
+        description: '對應 /admin/application 左側主菜單',
+      },
+      application: {
+        label: 'AI應用',
+        description: '左側主導航 / AI應用',
+      },
+      mindmap: {
+        label: '思維導圖',
+        description: '左側主導航 / 思維導圖',
+      },
+      knowledge: {
+        label: '知識庫',
+        description: '左側主導航 / 知識庫',
+      },
+      tool: {
+        label: '工具管理',
+        description: '左側主導航 / 工具管理',
+      },
+      model: {
+        label: '模型管理',
+        description: '左側主導航 / 模型管理',
+      },
+    },
+  },
 
   resourceAuthorization: {
     title: '資源授權',

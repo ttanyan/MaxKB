@@ -111,6 +111,50 @@ export default {
     enableSSL: '启用 SSL（如果 SMTP 端口是 465，通常需要启用 SSL）',
     enableTLS: '启用 TLS（如果 SMTP 端口是 587，通常需要启用 TLS）',
   },
+  menu: {
+    title: '菜单管理',
+    userList: '用户列表',
+    userListTip: '仅展示普通用户。系统管理员默认全部可见，无需在此配置。',
+    searchUserPlaceholder: '搜索用户名、昵称或邮箱',
+    currentUserTip: '正在配置用户：{username}',
+    selectAll: '全选',
+    clearAll: '清空',
+    resetCurrent: '恢复默认',
+    selectedCount: '已显示菜单',
+    hiddenCount: '已隐藏菜单',
+    previewTitle: '当前预览',
+    permissionTitle: '菜单权限',
+    permissionTip: '当前仅支持配置左侧主导航菜单。',
+    saveSuccess: '菜单权限保存成功',
+    resetSuccess: '已恢复默认菜单',
+    empty: '当前未选择菜单',
+    menuTree: {
+      mainNavigation: {
+        label: '主导航',
+        description: '对应 /admin/application 左侧主菜单',
+      },
+      application: {
+        label: 'AI应用',
+        description: '左侧主导航 / AI应用',
+      },
+      mindmap: {
+        label: '思维导图',
+        description: '左侧主导航 / 思维导图',
+      },
+      knowledge: {
+        label: '知识库',
+        description: '左侧主导航 / 知识库',
+      },
+      tool: {
+        label: '工具管理',
+        description: '左侧主导航 / 工具管理',
+      },
+      model: {
+        label: '模型管理',
+        description: '左侧主导航 / 模型管理',
+      },
+    },
+  },
   resourceAuthorization: {
     title: '资源授权',
     member: '成员',

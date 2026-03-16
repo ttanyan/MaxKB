@@ -109,6 +109,50 @@ export default {
     enableSSL: 'Enable SSL (if the SMTP port is 465, you usually need to enable SSL)',
     enableTLS: 'Enable TLS (if the SMTP port is 587, you usually need to enable TLS)',
   },
+  menu: {
+    title: 'Menu Management',
+    userList: 'Users',
+    userListTip: 'Only normal users are listed here. System administrators always see all menus and do not need configuration.',
+    searchUserPlaceholder: 'Search by username, nickname, or email',
+    currentUserTip: 'Editing menu visibility for {username}',
+    selectAll: 'Select All',
+    clearAll: 'Clear',
+    resetCurrent: 'Reset Default',
+    selectedCount: 'Visible Menus',
+    hiddenCount: 'Hidden Menus',
+    previewTitle: 'Preview',
+    permissionTitle: 'Menu Permissions',
+    permissionTip: 'Only the main navigation menus are configurable right now.',
+    saveSuccess: 'Menu permissions saved',
+    resetSuccess: 'Default menu restored',
+    empty: 'No menu selected',
+    menuTree: {
+      mainNavigation: {
+        label: 'Main Navigation',
+        description: 'Corresponds to the main menu on the left side of /admin/application',
+      },
+      application: {
+        label: 'AI Applications',
+        description: 'Left navigation / AI Applications',
+      },
+      mindmap: {
+        label: 'Mind Map',
+        description: 'Left navigation / Mind Map',
+      },
+      knowledge: {
+        label: 'Knowledge Base',
+        description: 'Left navigation / Knowledge Base',
+      },
+      tool: {
+        label: 'Tool Management',
+        description: 'Left navigation / Tool Management',
+      },
+      model: {
+        label: 'Model Management',
+        description: 'Left navigation / Model Management',
+      },
+    },
+  },
 
   resourceAuthorization: {
     title: 'Resource Authorization',

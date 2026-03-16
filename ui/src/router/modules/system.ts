@@ -600,6 +600,21 @@ const systemRouter = {
           component: () => import('@/views/system-setting/authentication/index.vue'),
         },
         {
+          path: '/system/setting/menu',
+          name: 'SystemMenuManagement',
+          meta: {
+            title: 'views.system.menu.title',
+            activeMenu: '/system',
+            parentPath: '/system',
+            parentName: 'system',
+            sameRoute: 'setting',
+            permission: [
+              new ComplexPermission([RoleConst.ADMIN], [PermissionConst.USER_READ], [], 'OR'),
+            ],
+          },
+          component: () => import('@/views/system-setting/menu/index.vue'),
+        },
+        {
           path: '/system/email',
           name: 'email',
           meta: {

@@ -1,5 +1,5 @@
 export default {
-  title: 'Tool',
+  title: 'Tool Management',
   all: 'All',
   createTool: 'Create Tool',
   editTool: 'Edit Tool',

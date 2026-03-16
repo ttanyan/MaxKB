@@ -3,6 +3,7 @@ import { type Ref } from 'vue'
 import LoginApi from '@/api/user/login'
 import type { LoginRequest } from '@/api/type/login'
 import useUserStore from './user'
+import useMenuSettingStore from './menu-setting'
 
 const useLoginStore = defineStore('login', {
   state: () => ({
@@ -68,6 +69,8 @@ const useLoginStore = defineStore('login', {
     async logout() {
       return LoginApi.logout().then(() => {
         localStorage.removeItem('token')
+        const menuSetting = useMenuSettingStore()
+        menuSetting.reset()
         return true
       })
     },

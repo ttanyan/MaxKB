@@ -11,3 +11,4 @@ from .email_setting import *
 from .system_profile import *
 from .valid import *
 from .system_config import *
+from .menu_setting import *

@@ -9,7 +9,7 @@
       <div class="header-right">
         <router-link v-if="isSystemManagement" to="/application" class="back-link">
           <span class="back-icon">&larr;</span>
-          返回工作空间
+          {{menuText.back}}
         </router-link>
       </div>
     </div>
@@ -19,7 +19,25 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import ChinaMobileIcon from '@/components/china-mobile-icon/index.vue'
+const { locale } = useI18n({ useScope: 'global' })
+const menuText = computed(() => {
+  if (locale.value === 'en-US') {
+    return {
+      back: 'Return to workspace',
+    }
+  }
+  if (locale.value === 'zh-Hant') {
+    return {
+      back: '返回工作空間',
+    }
+  }
+  return {
+    back: '返回工作空间',
+  }
+})
+
 
 const route = useRoute()
 

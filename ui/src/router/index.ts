@@ -11,6 +11,7 @@ import {
 } from 'vue-router'
 import useStore from '@/stores'
 import { routes } from '@/router/routes'
+import { getFirstAvailableMenuPath, resolveMenuIdByPath } from '@/utils/menu-setting'
 NProgress.configure({ showSpinner: false, speed: 500, minimum: 0.3 })
 const router = createRouter({
   history: createWebHistory(window.MaxKB?.prefix ? window.MaxKB?.prefix : import.meta.env.BASE_URL),
@@ -25,7 +26,7 @@ router.beforeEach(
       next()
       return
     }
-    const { user, login } = useStore()
+    const { user, login, menuSetting } = useStore()
 
     const notAuthRouteNameList = ['login', 'ForgotPassword', 'ResetPassword', 'Chat', 'UserLogin']
     if (!notAuthRouteNameList.includes(to.name ? to.name.toString() : '')) {
@@ -42,8 +43,15 @@ router.beforeEach(
       if (!user.userInfo) {
         await user.profile()
       }
+      await menuSetting.ensureLoaded()
     }
     set_next_route(to)
+    const menuId = resolveMenuIdByPath(to.path)
+    if (menuId && !user.is_admin() && !menuSetting.hasMenu(menuId)) {
+      const availablePath = getFirstAvailableMenuPath(menuSetting.getMenuList())
+      next(availablePath === '/no-permission' ? { name: 'noPermission' } : { path: availablePath })
+      return
+    }
     // 判断是否有菜单权限
     if (to.meta.permission ? hasPermission(to.meta.permission as any, 'OR') : true) {
       if(to.name=='noPermissionD'){
