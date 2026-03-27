@@ -42,4 +42,8 @@ export default {
     lark: 'Lark',
     dingtalk: 'DingTalk',
   },
+  role: {
+    admin: 'Admin',
+    user: 'User',
+  },
 }

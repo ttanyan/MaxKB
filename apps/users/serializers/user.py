@@ -468,10 +468,13 @@ class UserManageSerializer(serializers.Serializer):
             if user.role == RoleConstants.ADMIN.name and 'is_active' in instance and instance.get(
                     'is_active') is not None:
                 raise AppApiException(1004, _('Cannot modify administrator status'))
+            # 系统内置管理员不允许修改角色
+            if str(user.id) == 'f0dd8f71-e4ee-11ee-8c84-a8a1595801ab' and 'role' in instance:
+                raise AppApiException(1004, _('Cannot modify built-in administrator role'))
 
         @staticmethod
         def _update_user_fields(user, instance):
-            update_keys = ['email', 'nick_name', 'phone', 'is_active']
+            update_keys = ['email', 'nick_name', 'phone', 'is_active', 'role']
             for key in update_keys:
                 if key in instance and instance.get(key) is not None:
                     setattr(user, key, instance.get(key))

@@ -40,4 +40,8 @@ export default {
     lark: '飞书',
     dingtalk: '钉钉',
   },
+  role: {
+    admin: '管理员',
+    user: '普通用户',
+  },
 }

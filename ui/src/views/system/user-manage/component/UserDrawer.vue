@@ -54,6 +54,12 @@
       <el-form-item label="默认密码" v-if="!isEdit">
         <span>{{ userForm.password }}</span>
       </el-form-item>
+      <el-form-item :label="$t('views.role.member.role')" prop="role" v-if="isEdit">
+        <el-select v-model="userForm.role" :placeholder="$t('common.selectPlaceholder') + $t('views.role.member.role')">
+          <el-option :label="$t('views.userManage.role.user')" value="USER" />
+          <el-option :label="$t('views.userManage.role.admin')" value="ADMIN" />
+        </el-select>
+      </el-form-item>
     </el-form>
     <h4 class="title-decoration-1 mb-16 mt-8" v-if="user.isEE() || user.isPE()">
       {{ $t('views.userManage.roleSetting') }}
@@ -291,6 +297,7 @@ const open = (data: any) => {
     userForm.value.password = data.password
     userForm.value.phone = data.phone
     userForm.value.nick_name = data.nick_name
+    userForm.value.role = data.role
     list.value = data.role_setting?.map((item: any) => ({
       ...item,
       workspace_ids: item.workspace_ids.includes('None') ? [] : item.workspace_ids,

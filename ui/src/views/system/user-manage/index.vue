@@ -130,6 +130,15 @@
             </template>
           </el-table-column>
           <el-table-column
+            prop="role"
+            width="120"
+            :label="$t('views.role.member.role')"
+          >
+            <template #default="{ row }">
+              {{ row.role === 'ADMIN' ? $t('views.userManage.role.admin') : $t('views.userManage.role.user') }}
+            </template>
+          </el-table-column>
+          <el-table-column
             v-if="user.isEE() || user.isPE()"
             prop="role_name"
             :label="$t('views.role.member.role')"
