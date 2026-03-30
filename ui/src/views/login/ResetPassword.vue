@@ -1,6 +1,12 @@
 <template>
   <login-layout>
     <LoginContainer :subTitle="$t('theme.defaultSlogan')">
+      <template #logo>
+        <div class="login-brand">
+          <ChinaMobileIcon class="login-brand-icon" />
+          <h1 class="login-brand-title">AI-RAG</h1>
+        </div>
+      </template>
       <h2 class="mb-24">{{ $t('views.login.resetPassword') }}</h2>
       <el-form
         class="reset-password-form"
@@ -63,6 +69,7 @@ import { MsgSuccess } from '@/utils/message'
 import type { FormInstance, FormRules } from 'element-plus'
 import UserApi from '@/api/user/user'
 import { t } from '@/locales'
+import ChinaMobileIcon from '@/components/china-mobile-icon/index.vue';
 const router = useRouter()
 const route = useRoute()
 const {
@@ -134,4 +141,56 @@ const resetPassword = () => {
     })
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+
+  :deep(.china-mobile-icon) {
+    --china-mobile-icon-width: 268px;
+    --china-mobile-icon-height: 34px;
+    --china-mobile-icon-gap: 20px;
+  }
+}
+
+.login-brand-title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  background: linear-gradient(90deg, #6b47e5, #1e71c7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 1400px) {
+  .login-brand {
+    :deep(.china-mobile-icon) {
+      --china-mobile-icon-width: 236px;
+      --china-mobile-icon-height: 30px;
+      --china-mobile-icon-gap: 16px;
+    }
+  }
+
+  .login-brand-title {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .login-brand {
+    :deep(.china-mobile-icon) {
+      --china-mobile-icon-width: 210px;
+      --china-mobile-icon-height: 28px;
+      --china-mobile-icon-gap: 14px;
+    }
+  }
+
+  .login-brand-title {
+    font-size: 30px;
+  }
+}
+</style>

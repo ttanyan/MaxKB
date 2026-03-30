@@ -252,6 +252,28 @@
                             {{ $t('views.document.generateQuestion.title') }}
                           </el-dropdown-item>
                           <el-dropdown-item
+                            @click.stop="
+                              router.push({
+                                path: `/knowledge/${item.id}/${folder.currentFolder.id || 'shared'}/problem`,
+                              })
+                            "
+                            v-if="permissionPrecise.edit(item.id)"
+                          >
+                            <AppIcon iconName="app-problems" class="color-secondary"></AppIcon>
+                            {{ $t('views.problem.title') }}
+                          </el-dropdown-item>
+                          <el-dropdown-item
+                            @click.stop="
+                              router.push({
+                                path: `/knowledge/${item.id}/${folder.currentFolder.id || 'shared'}/hit-test`,
+                              })
+                            "
+                            v-if="permissionPrecise.edit(item.id)"
+                          >
+                            <AppIcon iconName="app-hit-test" class="color-secondary"></AppIcon>
+                            {{ $t('views.application.hitTest.title') }}
+                          </el-dropdown-item>
+                          <el-dropdown-item
                             v-if="isSystemShare"
                             @click.stop="openAuthorizedWorkspaceDialog(item)"
                           >

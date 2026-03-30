@@ -3,9 +3,6 @@
     <div v-if="loading" class="loading">
       加载中...
     </div>
-    <div v-else-if="!mindmapUrl" class="error">
-      思维导图配置未设置，请联系管理员
-    </div>
     <div v-else class="mindmap-content">
       <iframe
         :src="mindmapUrl"
