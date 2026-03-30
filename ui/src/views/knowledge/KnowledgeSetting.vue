@@ -9,6 +9,22 @@
               {{ $t('common.info') }}
             </h4>
             <BaseForm ref="BaseFormRef" :data="detail" :apiType="apiType"/>
+            <el-card shadow="never" class="mb-16 w-full layout-bg">
+              <el-descriptions :column="3" border class="creator-info-descriptions">
+                <el-descriptions-item :label="$t('common.creator')" class="creator-info-item">
+                  <el-select v-model="selectedCreator" placeholder="请选择创建者" v-if="!route.path.includes('share/') && permissionPrecise.edit(id)" class="creator-select">
+                    <el-option v-for="user in user_options" :key="user.id" :label="user.nick_name" :value="user.id" />
+                  </el-select>
+                  <span v-else class="creator-text">{{ detail?.nick_name ? i18n_name(detail.nick_name) : detail?.create_user || $t('common.unknown') }}</span>
+                </el-descriptions-item>
+                <el-descriptions-item :label="$t('common.createTime')" class="creator-info-item">
+                  <span class="creator-text">{{ detail?.create_time ? new Date(detail.create_time).toLocaleString() : $t('common.unknown') }}</span>
+                </el-descriptions-item>
+                <el-descriptions-item :label="$t('common.updateTime')" class="creator-info-item">
+                  <span class="creator-text">{{ detail?.update_time ? new Date(detail.update_time).toLocaleString() : $t('common.unknown') }}</span>
+                </el-descriptions-item>
+              </el-descriptions>
+            </el-card>
 
             <el-form
               ref="webFormRef"
@@ -185,11 +201,14 @@ import {useRoute} from 'vue-router'
 import BaseForm from '@/views/knowledge/component/BaseForm.vue'
 import {MsgSuccess, MsgConfirm} from '@/utils/message'
 import {t} from '@/locales'
+import {i18n_name} from '@/utils/common'
 import permissionMap from '@/permission'
+import useStore from '@/stores'
 
 import {loadSharedApi} from '@/utils/dynamics-api/shared-api'
 
 const route = useRoute()
+const { user } = useStore()
 const {
   params: {id, folderId},
 } = route as any
@@ -215,8 +234,10 @@ const isShared = computed(() => {
 const webFormRef = ref()
 const BaseFormRef = ref()
 const loading = ref(false)
-const detail = ref<any>({})
+const detail = ref<any>({ })
 const cloneModelId = ref('')
+const user_options = ref<any[]>([])
+const selectedCreator = ref('')
 
 const form = ref<any>({
   source_url: '',
@@ -269,11 +290,15 @@ async function submit() {
               meta: form.value,
               file_count_limit: form.value.file_count_limit,
               file_size_limit: form.value.file_size_limit,
+              create_user: selectedCreator.value,
+              user_id: selectedCreator.value,
               ...BaseFormRef.value.form,
             }
             : {
               file_count_limit: form.value.file_count_limit,
               file_size_limit: form.value.file_size_limit,
+              create_user: selectedCreator.value,
+              user_id: selectedCreator.value,
               ...BaseFormRef.value.form,
             }
 
@@ -290,6 +315,13 @@ async function submit() {
                       .putReEmbeddingKnowledge(id)
                       .then(() => {
                         MsgSuccess(t('common.saveSuccess'))
+                        // 更新页面上显示的创建者信息
+                        const selectedUser = user_options.value.find(user => user.id === selectedCreator.value)
+                        if (selectedUser) {
+                          detail.value.create_user = selectedUser.id
+                          detail.value.user_id = selectedUser.id
+                          detail.value.nick_name = selectedUser.nick_name
+                        }
                       })
                   })
               } else {
@@ -300,6 +332,13 @@ async function submit() {
                       .putReEmbeddingKnowledge(id)
                       .then(() => {
                         MsgSuccess(t('common.saveSuccess'))
+                        // 更新页面上显示的创建者信息
+                        const selectedUser = user_options.value.find(user => user.id === selectedCreator.value)
+                        if (selectedUser) {
+                          detail.value.create_user = selectedUser.id
+                          detail.value.user_id = selectedUser.id
+                          detail.value.nick_name = selectedUser.nick_name
+                        }
                       })
                   })
               }
@@ -312,13 +351,25 @@ async function submit() {
               .putLarkKnowledge(id, obj, loading)
               .then(() => {
                 MsgSuccess(t('common.saveSuccess'))
+                // 更新页面上显示的创建者信息
+                const selectedUser = user_options.value.find(user => user.id === selectedCreator.value)
+                if (selectedUser) {
+                  detail.value.create_user = selectedUser.id
+                  detail.value.nick_name = selectedUser.nick_name
+                }
               })
           } else {
             loadSharedApi({type: 'knowledge', systemType: apiType.value})
               .putKnowledge(id, obj, loading)
-              .then(() => {
-                MsgSuccess(t('common.saveSuccess'))
-              })
+                  .then(() => {
+                    MsgSuccess(t('common.saveSuccess'))
+                    // 更新页面上显示的创建者信息
+                    const selectedUser = user_options.value.find(user => user.id === selectedCreator.value)
+                    if (selectedUser) {
+                      detail.value.create_user = selectedUser.id
+                      detail.value.nick_name = selectedUser.nick_name
+                    }
+                  })
           }
         }
       }
@@ -332,6 +383,8 @@ function getDetail() {
     .then((res: any) => {
       detail.value = res.data
       cloneModelId.value = res.data?.embedding_model_id
+      // 优先使用user_id，如果不存在则使用create_user
+      selectedCreator.value = res.data?.user_id || res.data?.create_user || ''
       if (detail.value?.type === 0) {
         form.value.file_count_limit = res.data.file_count_limit
         form.value.file_size_limit = res.data.file_size_limit
@@ -339,16 +392,70 @@ function getDetail() {
       if (detail.value?.type === 1 || detail.value?.type === 2) {
         form.value = res.data.meta
       }
+      // 如果有用户列表，尝试找到对应的用户信息来更新nick_name
+      if (user_options.value.length > 0 && selectedCreator.value) {
+        const selectedUser = user_options.value.find(user => user.id === selectedCreator.value)
+        if (selectedUser) {
+          detail.value.nick_name = selectedUser.nick_name
+        }
+      }
+    })
+}
+
+function getUserList() {
+  loadSharedApi({ type: 'workspace', isShared: isShared.value, systemType: apiType.value })
+    .getAllMemberList(user.getWorkspaceId(), loading)
+    .then((res: any) => {
+      user_options.value = res.data
+      // 如果已经有selectedCreator的值，尝试找到对应的用户信息来更新nick_name
+      if (selectedCreator.value) {
+        const selectedUser = user_options.value.find(user => user.id === selectedCreator.value)
+        if (selectedUser) {
+          detail.value.nick_name = selectedUser.nick_name
+        }
+      }
     })
 }
 
 onMounted(() => {
   getDetail()
+  getUserList()
 })
 </script>
 <style lang="scss" scoped>
 .knowledge-setting {
   width: 70%;
   margin: 0 auto;
+}
+
+.creator-info-descriptions {
+  width: 100%;
+}
+
+.creator-info-item {
+  padding: 8px 12px;
+}
+
+.creator-select {
+  width: 100%;
+  min-width: 180px;
+}
+
+.creator-text {
+  display: inline-block;
+  width: 100%;
+  min-width: 180px;
+}
+
+/* 调整描述项标签的宽度，确保标签和内容对齐 */
+:deep(.el-descriptions__label) {
+  padding-right: 8px;
+  white-space: nowrap;
+}
+
+/* 调整描述项内容的宽度，确保内容有足够的空间 */
+:deep(.el-descriptions__content) {
+  padding-left: 8px;
+  flex: 1;
 }
 </style>

@@ -80,6 +80,8 @@ class KnowledgeEditRequest(serializers.Serializer):
     )
     file_size_limit = serializers.IntegerField(required=False, label=_('file size limit'))
     file_count_limit = serializers.IntegerField(required=False, label=_('file count limit'))
+    user_id = serializers.UUIDField(required=False, label=_('user id'))
+    create_user = serializers.UUIDField(required=False, label=_('create user'))
 
     @staticmethod
     def get_knowledge_meta_valid_map():
@@ -381,6 +383,10 @@ class KnowledgeSerializer(serializers.Serializer):
                 knowledge.file_size_limit = instance.get('file_size_limit')
             if 'file_count_limit' in instance:
                 knowledge.file_count_limit = instance.get('file_count_limit')
+            if 'user_id' in instance:
+                knowledge.user_id = instance.get('user_id')
+            if 'create_user' in instance:
+                knowledge.create_user = instance.get('create_user')
             if 'application_id_list' in instance and instance.get('application_id_list') is not None:
                 application_id_list = instance.get('application_id_list')
                 # 当前用户可修改关联的知识库列表
