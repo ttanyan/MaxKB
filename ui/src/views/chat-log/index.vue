@@ -163,6 +163,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="mark_sum" :label="$t('views.chatLog.table.mark')" align="right" />
+        <el-table-column prop="feedback_count" :label="$t('views.chatLog.table.feedback.countLabel')" align="center">
+          <template #default="{ row }">
+            <el-button v-if="row.feedback_count" link type="primary" @click.stop="openFeedbackList(row)">
+              {{ row.feedback_count }}
+            </el-button>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="asker" :label="$t('views.chatLog.table.user')">
           <template #default="{ row }">
             {{ row.asker?.username }}
@@ -237,6 +245,23 @@
           </el-button>
         </span>
       </template>
+    </el-dialog>
+    <el-dialog
+      :title="$t('views.chatLog.feedback.listTitle')"
+      v-model="feedbackListDialogVisible"
+      width="720px"
+      :close-on-click-modal="false"
+    >
+      <div v-if="currentFeedbackList.length" class="feedback-list">
+        <div v-for="(item, index) in currentFeedbackList" :key="index" class="feedback-list__item">
+          <div class="feedback-list__meta">
+            <span>{{ feedbackTypeLabelMap[item.feedback_type] || item.feedback_type }}</span>
+            <span>{{ datetimeFormat(item.create_time) }}</span>
+          </div>
+          <div class="feedback-list__content">{{ item.content }}</div>
+        </div>
+      </div>
+      <div v-else>-</div>
     </el-dialog>
   </div>
 </template>
@@ -321,6 +346,7 @@ const multipleSelection = ref<any[]>([])
 const ChatRecordRef = ref()
 const loading = ref(false)
 const documentLoading = ref(false)
+const feedbackListDialogVisible = ref(false)
 const paginationConfig = reactive({
   current_page: 1,
   page_size: 20,
@@ -330,6 +356,13 @@ const dialogVisible = ref(false)
 const documentDialogVisible = ref(false)
 const days = ref<number>(180)
 const tableData = ref<any[]>([])
+const currentFeedbackList = ref<any[]>([])
+const feedbackTypeLabelMap = {
+  SUGGESTION: t('views.chatLog.feedback.typeSuggestion'),
+  QUESTION: t('views.chatLog.feedback.typeQuestion'),
+  SUPPLEMENT: t('views.chatLog.feedback.typeSupplement'),
+  OTHER: t('views.chatLog.feedback.typeOther'),
+} as Record<string, string>
 const tableIndexMap = computed<Dict<number>>(() => {
   return tableData.value
     .map((row, index) => ({
@@ -570,6 +603,11 @@ function openDocumentDialog() {
   documentDialogVisible.value = true
 }
 
+function openFeedbackList(row: any) {
+  currentFeedbackList.value = row.feedback_list || []
+  feedbackListDialogVisible.value = true
+}
+
 onMounted(() => {
   changeDayHandle(history_day.value)
   getDetail()
@@ -580,5 +618,33 @@ onMounted(() => {
   :deep(tr) {
     cursor: pointer;
   }
+}
+
+.feedback-list {
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.feedback-list__item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+}
+
+.feedback-list__item:last-child {
+  border-bottom: none;
+}
+
+.feedback-list__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.feedback-list__content {
+  white-space: pre-wrap;
+  line-height: 1.6;
 }
 </style>

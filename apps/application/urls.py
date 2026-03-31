@@ -25,6 +25,7 @@ urlpatterns = [
     path('workspace/<str:workspace_id>/application/<str:application_id>/chat/<int:current_page>/<int:page_size>', views.ApplicationChat.Page.as_view()),
     path('workspace/<str:workspace_id>/application/<str:application_id>/chat/<str:chat_id>/chat_record', views.ApplicationChatRecord.as_view()),
     path('workspace/<str:workspace_id>/application/<str:application_id>/chat/<str:chat_id>/chat_record/<str:chat_record_id>', views.ApplicationChatRecordOperateAPI.as_view()),
+    path('workspace/<str:workspace_id>/application/<str:application_id>/chat/<str:chat_id>/chat_record/<str:chat_record_id>/feedback', views.ApplicationChatRecordOperateAPI.as_view()),
     path('workspace/<str:workspace_id>/application/<str:application_id>/chat/<str:chat_id>/chat_record/<int:current_page>/<int:page_size>', views.ApplicationChatRecord.Page.as_view()),
     path('workspace/<str:workspace_id>/application/<str:application_id>/chat/<str:chat_id>/chat_record/<str:chat_record_id>/improve', views.ApplicationChatRecordImprove.as_view()),
     path('workspace/<str:workspace_id>/application/<str:application_id>/chat/<str:chat_id>/chat_record/<str:chat_record_id>/knowledge/<str:knowledge_id>/document/<str:document_id>/improve', views.ApplicationChatRecordImproveParagraph.as_view()),

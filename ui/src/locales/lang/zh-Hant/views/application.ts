@@ -21,6 +21,13 @@ export default {
     publish: '發布',
     addModel: '新增模型',
   },
+  publishDialog: {
+    title: '選擇發布方式',
+    internalTitle: '內部發布',
+    internalDesc: '發布後自動關閉公開訪問連結，僅保留內部使用。',
+    publicTitle: '公開發布',
+    publicDesc: '發布後自動開啟公開訪問連結，允許外部訪問。',
+  },
   delete: {
     confirmTitle: '是否刪除應用：',
     confirmMessage: '刪除後該應用將不再提供服務，請謹慎操作。',

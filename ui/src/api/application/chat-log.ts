@@ -198,6 +198,30 @@ const getChatRecordDetails: (
     loading,
   )
 }
+
+/**
+ * 提交对话记录反馈
+ * @param application_id
+ * @param chat_id
+ * @param chat_record_id
+ * @param data
+ * @param loading
+ */
+const postChatRecordFeedback: (
+  application_id: string,
+  chat_id: string,
+  chat_record_id: string,
+  data: any,
+  loading?: Ref<boolean>,
+) => Promise<Result<any>> = (application_id, chat_id, chat_record_id, data, loading) => {
+  return post(
+    `${prefix.value}/${application_id}/chat/${chat_id}/chat_record/${chat_record_id}/feedback`,
+    data,
+    undefined,
+    loading,
+  )
+}
+
 export default {
   postChatLogAddKnowledge,
   getChatLog,
@@ -207,4 +231,5 @@ export default {
   delMarkChatRecord,
   postExportChatLog,
   getChatRecordDetails,
+  postChatRecordFeedback,
 }

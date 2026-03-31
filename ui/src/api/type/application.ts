@@ -57,6 +57,7 @@ interface chatType {
   id: string
   problem_text: string
   answer_text: string
+  comprehensive_score?: number | string | null
   buffer: Array<string>
   answer_text_list: Array<
     Array<{

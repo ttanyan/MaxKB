@@ -22,6 +22,13 @@ export default {
     toChat: 'Chat',
     publish: 'Publish',
   },
+  publishDialog: {
+    title: 'Select Publish Mode',
+    internalTitle: 'Internal Publish',
+    internalDesc: 'Publish the app and automatically turn off the public URL.',
+    publicTitle: 'Public Publish',
+    publicDesc: 'Publish the app and automatically turn on the public URL.',
+  },
   delete: {
     confirmTitle: 'Are you sure you want to delete this APP: ',
     confirmMessage:

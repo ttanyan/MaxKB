@@ -82,6 +82,8 @@ const checkModelType = (model_type: string) => {
     const excludedProviders = [
       'Anthropic',
       'Amazon Bedrock',
+      'OpenAI',
+      'Azure OpenAI',
       'Gemini',
       'SILICONFLOW',
       'Xorbits Inference',

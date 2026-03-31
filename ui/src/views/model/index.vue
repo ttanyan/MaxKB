@@ -223,6 +223,8 @@ onMounted(() => {
     const excludedProviders = [
       'Anthropic',
       'Amazon Bedrock',
+      'OpenAI',
+      'Azure OpenAI',
       'Gemini',
       'SILICONFLOW',
       'Xorbits Inference',

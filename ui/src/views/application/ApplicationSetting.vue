@@ -15,7 +15,7 @@
         </el-button>
         <el-button
           type="primary"
-          @click="publish(applicationFormRef)"
+          @click="openPublishDialog(applicationFormRef)"
           :disabled="loading"
           v-if="permissionPrecise.edit(id)"
         >
@@ -633,6 +633,46 @@
     />
     <McpServersDialog ref="mcpServersDialogRef" @refresh="submitMcpServersDialog" />
     <ToolDialog ref="toolDialogRef" @refresh="submitToolDialog" />
+    <el-dialog
+      v-model="publishDialogVisible"
+      :title="$t('views.application.publishDialog.title')"
+      width="520"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <div class="publish-mode-list">
+        <div
+          class="publish-mode-card"
+          :class="{ active: publishMode === 'internal' }"
+          @click="publishMode = 'internal'"
+        >
+          <div class="publish-mode-card__title">
+            {{ $t('views.application.publishDialog.internalTitle') }}
+          </div>
+          <div class="publish-mode-card__desc">
+            {{ $t('views.application.publishDialog.internalDesc') }}
+          </div>
+        </div>
+        <div
+          class="publish-mode-card"
+          :class="{ active: publishMode === 'public' }"
+          @click="publishMode = 'public'"
+        >
+          <div class="publish-mode-card__title">
+            {{ $t('views.application.publishDialog.publicTitle') }}
+          </div>
+          <div class="publish-mode-card__desc">
+            {{ $t('views.application.publishDialog.publicDesc') }}
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="publishDialogVisible = false">{{ $t('common.cancel') }}</el-button>
+        <el-button type="primary" :loading="loading" @click="confirmPublish(applicationFormRef)">
+          {{ $t('common.confirm') }}
+        </el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script setup lang="ts">
@@ -703,6 +743,8 @@ const AddKnowledgeDialogRef = ref()
 
 const loading = ref(false)
 const knowledgeLoading = ref(false)
+const publishDialogVisible = ref(false)
+const publishMode = ref<'internal' | 'public'>('public')
 
 const applicationForm = ref<ApplicationFormType>({
   name: '',
@@ -791,9 +833,31 @@ const publish = (formEl: FormInstance | undefined) => {
         )
       })
       .then(() => {
+        return loadSharedApi({ type: 'application', systemType: apiType.value }).putAccessToken(
+          id,
+          {
+            is_active: publishMode.value === 'public',
+          },
+          loading,
+        )
+      })
+      .then(() => {
+        publishDialogVisible.value = false
         MsgSuccess(t('views.application.tip.publishSuccess'))
       })
   })
+}
+
+const openPublishDialog = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate().then(() => {
+    publishMode.value = 'public'
+    publishDialogVisible.value = true
+  })
+}
+
+const confirmPublish = (formEl: FormInstance | undefined) => {
+  publish(formEl)
 }
 const submit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -1125,6 +1189,39 @@ onMounted(() => {
 .application-setting {
   .relate-knowledge-card {
     color: var(--app-text-color);
+  }
+
+  .publish-mode-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .publish-mode-card {
+    border: 1px solid var(--el-border-color);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .publish-mode-card.active {
+    border-color: var(--el-color-primary);
+    background: var(--el-color-primary-light-9);
+    box-shadow: 0 0 0 1px var(--el-color-primary-light-5);
+  }
+
+  .publish-mode-card__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--app-text-color);
+    margin-bottom: 8px;
+  }
+
+  .publish-mode-card__desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--app-text-color-light);
   }
 
   .dialog-bg {

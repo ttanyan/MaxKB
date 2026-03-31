@@ -24,6 +24,13 @@ export default {
     toChat: '去对话',
     publish: '发布',
   },
+  publishDialog: {
+    title: '选择发布方式',
+    internalTitle: '内部发布',
+    internalDesc: '发布后自动关闭公开访问链接，仅保留内部使用。',
+    publicTitle: '公开发布',
+    publicDesc: '发布后自动打开公开访问链接，允许外部访问。',
+  },
   delete: {
     confirmTitle: '是否删除应用：',
     confirmMessage: '删除后该应用将不再提供服务，请谨慎操作。',

@@ -18,7 +18,9 @@ export default {
     feedback: {
       label: '用戶反饋',
       star: '贊同',
-      trample: '反對'
+      trample: '反對',
+      countLabel: '反饋條數',
+      contentLabel: '反饋內容'
     },
     mark: '改進標註',
     recenTimes: '最近對話時間'
@@ -38,5 +40,20 @@ export default {
     title: {
       placeholder: '請給當前內容設定一個標題，以便管理查看'
     }
+  },
+  feedback: {
+    title: '對話反饋',
+    shortTitle: '反饋',
+    type: '反饋類型',
+    typePlaceholder: '請選擇反饋類型',
+    typeSuggestion: '建議',
+    typeQuestion: '疑問',
+    typeSupplement: '補充',
+    typeOther: '其他',
+    content: '反饋內容',
+    listTitle: '反饋詳情',
+    contentPlaceholder: '請輸入您的反饋內容',
+    typeRequired: '請選擇反饋類型',
+    contentRequired: '請輸入反饋內容'
   }
 }

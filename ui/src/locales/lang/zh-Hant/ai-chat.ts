@@ -15,6 +15,7 @@ export default {
   chatId: '對話 ID',
   chatUserId: '對話用戶 ID',
   chatUserType: '對話用戶類型',
+  comprehensiveScore: '置信度：',
   userInput: '用戶輸入',
   quote: '引用',
   download: '點擊下載文件',

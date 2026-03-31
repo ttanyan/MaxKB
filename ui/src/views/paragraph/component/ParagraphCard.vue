@@ -120,7 +120,17 @@
         </el-dropdown>
       </el-card>
     </div>
-    <h2 class="mb-16">{{ data.title || '-' }}</h2>
+    <div class="paragraph-box__header mb-16">
+      <h2 class="paragraph-box__title">{{ data.title || '-' }}</h2>
+      <div class="paragraph-box__meta" v-if="data.create_time || data.update_time">
+        <span v-if="data.create_time">
+          {{ $t('common.createTime') }}：{{ datetimeFormat(data.create_time) }}
+        </span>
+        <span v-if="data.update_time">
+          {{ $t('common.updateTime') }}：{{ datetimeFormat(data.update_time) }}
+        </span>
+      </div>
+    </div>
     <MdPreview
       ref="editorRef"
       editorId="preview-only"
@@ -154,6 +164,7 @@ import { MsgSuccess, MsgConfirm } from '@/utils/message'
 import { loadSharedApi } from '@/utils/dynamics-api/shared-api'
 import permissionMap from '@/permission'
 import { t } from '@/locales'
+import { datetimeFormat } from '@/utils/time'
 const props = defineProps<{
   data: any
   disabled?: boolean
@@ -336,6 +347,25 @@ watch(dialogVisible, (val: boolean) => {
     top: 0;
     overflow: inherit;
     z-index: 10;
+  }
+
+  .paragraph-box__header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .paragraph-box__title {
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .paragraph-box__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    font-size: 12px;
+    color: var(--app-text-color-light);
   }
 }
 </style>

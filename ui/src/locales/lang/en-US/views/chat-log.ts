@@ -18,7 +18,9 @@ export default {
     feedback: {
       label: 'User Feedback',
       star: 'Agree',
-      trample: 'Disagree'
+      trample: 'Disagree',
+      countLabel: 'Feedback Count',
+      contentLabel: 'Feedback Content'
     },
     mark: 'Marks',
     recenTimes: 'Last Chat Time'
@@ -38,5 +40,20 @@ export default {
     title: {
       placeholder: 'Please set a title for the current content for management and viewing'
     }
+  },
+  feedback: {
+    title: 'Chat Feedback',
+    shortTitle: 'Feedback',
+    type: 'Feedback Type',
+    typePlaceholder: 'Please select feedback type',
+    typeSuggestion: 'Suggestion',
+    typeQuestion: 'Question',
+    typeSupplement: 'Supplement',
+    typeOther: 'Other',
+    content: 'Feedback Content',
+    listTitle: 'Feedback Details',
+    contentPlaceholder: 'Please enter your feedback content',
+    typeRequired: 'Please select feedback type',
+    contentRequired: 'Please enter feedback content'
   }
 }

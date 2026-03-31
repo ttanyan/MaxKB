@@ -42,6 +42,10 @@ class ApplicationChatResponseSerializers(serializers.Serializer):
     star_num = serializers.IntegerField(required=True, label=_("Number of Likes"))
     trample_num = serializers.IntegerField(required=True, label=_("Number of thumbs-downs"))
     mark_sum = serializers.IntegerField(required=True, label=_("Number of tags"))
+    feedback_count = serializers.IntegerField(required=False, label=_("Feedback count"))
+    feedback_content = serializers.CharField(required=False, allow_null=True, allow_blank=True,
+                                             label=_("Feedback content"))
+    feedback_list = serializers.ListField(required=False, label=_("Feedback list"))
 
 
 class ApplicationChatRecordExportRequest(serializers.Serializer):
@@ -136,11 +140,45 @@ class ApplicationChatQuerySerializers(serializers.Serializer):
     def list(self, with_valid=True):
         if with_valid:
             self.is_valid(raise_exception=True)
-        return native_search(self.get_query_set(), select_string=get_file_content(
+        result = native_search(self.get_query_set(), select_string=get_file_content(
             os.path.join(PROJECT_DIR, "apps", "application", 'sql',
                          ('list_application_chat_ee.sql' if ['PE', 'EE'].__contains__(
                              edition) else 'list_application_chat.sql'))),
                              with_table_name=False)
+        return self.append_feedback_content(result)
+
+    @staticmethod
+    def get_feedback_items(details):
+        if not isinstance(details, dict):
+            return []
+        feedback = details.get('feedback')
+        if isinstance(feedback, list):
+            return feedback
+        if isinstance(feedback, dict):
+            items = feedback.get('items')
+            return items if isinstance(items, list) else []
+        return []
+
+    @classmethod
+    def append_feedback_content(cls, records):
+        if not records:
+            return records
+        chat_id_list = [row.get('id') for row in records if row.get('id') is not None]
+        feedback_map = {}
+        chat_records = QuerySet(ChatRecord).filter(chat_id__in=chat_id_list).order_by('create_time')
+        for chat_record in chat_records:
+            feedback_items = cls.get_feedback_items(chat_record.details)
+            if not feedback_items:
+                continue
+            feedback_map[str(chat_record.chat_id)] = feedback_items
+
+        for row in records:
+            feedback_items = feedback_map.get(str(row.get('id')), [])
+            latest_feedback = feedback_items[-1] if feedback_items else {}
+            row['feedback_count'] = len(feedback_items)
+            row['feedback_content'] = latest_feedback.get('content') if isinstance(latest_feedback, dict) else ''
+            row['feedback_list'] = feedback_items
+        return records
 
     @staticmethod
     def paragraph_list_to_string(paragraph_list):
@@ -239,11 +277,13 @@ class ApplicationChatQuerySerializers(serializers.Serializer):
     def page(self, current_page: int, page_size: int, with_valid=True):
         if with_valid:
             self.is_valid(raise_exception=True)
-        return native_page_search(current_page, page_size, self.get_query_set(), select_string=get_file_content(
+        page = native_page_search(current_page, page_size, self.get_query_set(), select_string=get_file_content(
             os.path.join(PROJECT_DIR, "apps", "application", 'sql',
                          ('list_application_chat_ee.sql' if ['PE', 'EE'].__contains__(
                              edition) else 'list_application_chat.sql'))),
                                   with_table_name=False)
+        page['records'] = self.append_feedback_content(page.get('records'))
+        return page
 
 
 class ChatCountSerializer(serializers.Serializer):

@@ -18,7 +18,9 @@ export default {
     feedback: {
       label: '用户反馈',
       star: '赞同',
-      trample: '反对'
+      trample: '反对',
+      countLabel: '反馈条数',
+      contentLabel: '反馈内容'
     },
     mark: '改进标注',
     recenTimes: '最近对话时间'
@@ -38,5 +40,20 @@ export default {
     title: {
       placeholder: '请给当前内容设置一个标题，以便管理查看'
     }
+  },
+  feedback: {
+    title: '对话反馈',
+    shortTitle: '反馈',
+    type: '反馈类型',
+    typePlaceholder: '请选择反馈类型',
+    typeSuggestion: '建议',
+    typeQuestion: '疑问',
+    typeSupplement: '补充',
+    typeOther: '其他',
+    content: '反馈内容',
+    listTitle: '反馈详情',
+    contentPlaceholder: '请输入您的反馈内容',
+    typeRequired: '请选择反馈类型',
+    contentRequired: '请输入反馈内容'
   }
 }

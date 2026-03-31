@@ -250,6 +250,15 @@ const getChatRecord: (
 ) => Promise<Result<any>> = (chat_id, chat_record_id, loading) => {
   return get(`historical_conversation/${chat_id}/record/${chat_record_id}`, {}, loading)
 }
+
+const postChatRecordFeedback: (
+  chat_id: string,
+  chat_record_id: string,
+  data: any,
+  loading?: Ref<boolean>,
+) => Promise<Result<any>> = (chat_id, chat_record_id, data, loading) => {
+  return post(`historical_conversation/${chat_id}/record/${chat_record_id}/feedback`, data, undefined, loading)
+}
 /**
  * 文本转语音
  */
@@ -356,6 +365,7 @@ export default {
   resetCurrentPassword,
   getChatUserProfile,
   getChatRecord,
+  postChatRecordFeedback,
   textToSpeech,
   speechToText,
   deleteChat,

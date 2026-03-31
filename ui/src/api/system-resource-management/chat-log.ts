@@ -180,6 +180,22 @@ const getChatRecordDetails: (
     loading,
   )
 }
+
+const postChatRecordFeedback: (
+  application_id: string,
+  chat_id: string,
+  chat_record_id: string,
+  data: any,
+  loading?: Ref<boolean>,
+) => Promise<Result<any>> = (application_id, chat_id, chat_record_id, data, loading) => {
+  return post(
+    `${prefix}/${application_id}/chat/${chat_id}/chat_record/${chat_record_id}/feedback`,
+    data,
+    undefined,
+    loading,
+  )
+}
+
 export default {
   postChatLogAddKnowledge,
   getChatLog,
@@ -189,4 +205,5 @@ export default {
   delMarkChatRecord,
   postExportChatLog,
   getChatRecordDetails,
+  postChatRecordFeedback,
 }

@@ -572,7 +572,19 @@ function toChat(row: any) {
     aips = aips ? aips : []
     const apiParams = mapToUrlParams(aips) ? '?' + mapToUrlParams(aips) : ''
     ApplicationApi.getAccessToken(row.id, loading).then((res: any) => {
-      window.open(application.location + res?.data?.access_token + apiParams)
+      if (res?.data?.is_active) {
+        window.open(application.location + res?.data?.access_token + apiParams)
+        return
+      }
+      const debugPreviewUrl = router.resolve({
+        name: 'AppSetting',
+        params: {
+          from: 'workspace',
+          id: row.id,
+          type: row.type,
+        },
+      }).href
+      window.open(debugPreviewUrl)
     })
   })
 }

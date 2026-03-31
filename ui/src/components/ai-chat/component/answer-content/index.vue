@@ -55,6 +55,17 @@
       </div>
     </template>
     <div
+      v-if="formattedComprehensiveScore !== null"
+      class="content confidence-row"
+      :style="{
+        'padding-left': showAvatar ? 'var(--padding-left)' : '0',
+        'padding-right': showUserAvatar ? 'var(--padding-left)' : '0',
+      }"
+    >
+      <span class="confidence-row__label">{{ $t('chat.comprehensiveScore') }}</span>
+      <span class="confidence-row__value">{{ formattedComprehensiveScore }}</span>
+    </div>
+    <div
       class="content"
       :style="{
         'padding-left': showAvatar ? 'var(--padding-left)' : '0',
@@ -146,6 +157,18 @@ const answer_text_list = computed(() => {
   })
 })
 
+const formattedComprehensiveScore = computed(() => {
+  const score = props.chatRecord?.comprehensive_score
+  if (score === undefined || score === null || score === '') {
+    return null
+  }
+  const numericScore = Number(score)
+  if (Number.isNaN(numericScore)) {
+    return null
+  }
+  return numericScore.toFixed(2)
+})
+
 function showSource(row: any) {
   if (props.type === 'log') {
     return true
@@ -182,4 +205,19 @@ onMounted(() => {
   })
 })
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.confidence-row {
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--app-text-color-light);
+}
+
+.confidence-row__label {
+  margin-right: 6px;
+}
+
+.confidence-row__value {
+  color: var(--app-text-color);
+  font-weight: 500;
+}
+</style>

@@ -93,7 +93,15 @@
             <AppIcon iconName="app-oppose-color"></AppIcon>
           </el-button>
         </el-tooltip>
+        <el-divider direction="vertical" />
+        <el-tooltip effect="dark" :content="$t('views.chatLog.feedback.shortTitle')" placement="top">
+          <el-button text @click="openFeedback(data)" class="feedback-trigger">
+            <el-icon class="feedback-trigger__icon"><ChatDotRound /></el-icon>
+            <span class="feedback-trigger__label">{{ $t('views.chatLog.feedback.shortTitle') }}</span>
+          </el-button>
+        </el-tooltip>
       </span>
+      <FeedbackDialog ref="FeedbackDialogRef" @refresh="refreshFeedback" />
       <div ref="audioCiontainer"></div>
     </div>
   </div>
@@ -101,12 +109,14 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref, onBeforeUnmount, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { ChatDotRound } from '@element-plus/icons-vue'
 import { copyClick } from '@/utils/clipboard'
 import applicationApi from '@/api/application/application'
 import chatAPI from '@/api/chat/chat'
 import { datetimeFormat } from '@/utils/time'
 import { MsgError } from '@/utils/message'
 import bus from '@/bus'
+import FeedbackDialog from '@/views/chat-log/component/FeedbackDialog.vue'
 const copy = (data: any) => {
   try {
     const text = data.answer_text_list
@@ -143,6 +153,7 @@ const emit = defineEmits(['update:data', 'regeneration'])
 
 const audioPlayer = ref<HTMLAudioElement[] | null>([])
 const audioCiontainer = ref<HTMLDivElement>()
+const FeedbackDialogRef = ref()
 const buttonData = ref(props.data)
 const loading = ref(false)
 
@@ -150,6 +161,19 @@ const audioList = ref<string[]>([])
 
 function regeneration() {
   emit('regeneration')
+}
+
+function openFeedback(data: any) {
+  FeedbackDialogRef.value.open({
+    ...data,
+    chat_id: data.chat_id || props.chatId,
+    application_id: props.applicationId
+  })
+}
+
+function refreshFeedback(data: any) {
+  buttonData.value = data
+  emit('update:data', buttonData.value)
 }
 
 function voteHandle(val: string) {
@@ -559,6 +583,36 @@ onBeforeUnmount(() => {
   }
 })
 </script>
+<style lang="scss" scoped>
+.feedback-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+}
+
+.feedback-trigger__icon {
+  font-size: 16px;
+}
+
+.feedback-trigger__label {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  transition:
+    max-width 0.18s ease,
+    opacity 0.18s ease,
+    margin-left 0.18s ease;
+  margin-left: 0;
+}
+
+.feedback-trigger:hover .feedback-trigger__label {
+  max-width: 32px;
+  opacity: 1;
+  margin-left: 4px;
+}
+</style>
 <style lang="scss" scoped>
 @media only screen and (max-width: 430px) {
   .chat-operation-button {

@@ -107,6 +107,30 @@ class ApplicationChatRecordOperateAPI(APIView):
                 'chat_id': chat_id,
                 'chat_record_id': chat_record_id}).one(True))
 
+    @extend_schema(
+        methods=['POST'],
+        description=_('Submit conversation feedback'),
+        summary=_('Submit conversation feedback'),
+        operation_id=_('Submit conversation feedback'),  # type: ignore
+        tags=[_('Application/Conversation Log')]  # type: ignore
+    )
+    @has_permissions(PermissionConstants.APPLICATION_CHAT_LOG_READ.get_workspace_application_permission(),
+                     PermissionConstants.APPLICATION_CHAT_LOG_READ.get_workspace_permission_workspace_manage_role(),
+                     PermissionConstants.APPLICATION_READ.get_workspace_application_permission(),
+                     PermissionConstants.APPLICATION_READ.get_workspace_permission_workspace_manage_role(),
+                     ViewPermission([RoleConstants.USER.get_workspace_role()],
+                                    [PermissionConstants.APPLICATION.get_workspace_application_permission()],
+                                    CompareConstants.AND),
+                     RoleConstants.WORKSPACE_MANAGE.get_workspace_role())
+    def post(self, request: Request, workspace_id: str, application_id: str, chat_id: str, chat_record_id: str):
+        return result.success(ChatRecordOperateSerializer(
+            data={
+                'workspace_id': workspace_id,
+                'application_id': application_id,
+                'chat_id': chat_id,
+                'chat_record_id': chat_record_id,
+                **request.data}).feedback(request=request))
+
 
 class ApplicationChatRecordAddKnowledge(APIView):
     authentication_classes = [TokenAuth]

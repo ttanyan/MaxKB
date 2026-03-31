@@ -10,6 +10,7 @@ from functools import reduce
 from typing import Dict
 
 import uuid_utils.compat as uuid
+from django.utils import timezone
 from django.db import transaction
 from django.db.models import QuerySet
 from django.db.models.aggregates import Max, Min
@@ -45,6 +46,8 @@ class ChatRecordOperateSerializer(serializers.Serializer):
     workspace_id = serializers.CharField(required=False, allow_null=True, allow_blank=True, label=_("Workspace ID"))
     application_id = serializers.UUIDField(required=True, label=_("Application ID"))
     chat_record_id = serializers.UUIDField(required=True, label=_("Conversation record id"))
+    feedback_type = serializers.CharField(required=False, allow_blank=True, label=_("Feedback type"))
+    content = serializers.CharField(required=False, allow_blank=True, label=_("Feedback content"))
 
     def is_valid(self, *, debug=False, raise_exception=False):
         super().is_valid(raise_exception=True)
@@ -85,6 +88,49 @@ class ChatRecordOperateSerializer(serializers.Serializer):
         return ApplicationChatRecordQuerySerializers.reset_chat_record(
             chat_record, True if debug else show_source, True if debug else show_exec)
 
+    def feedback(self, request=None, with_valid=True):
+        if with_valid:
+            self.is_valid(raise_exception=True)
+        chat_record = self.get_chat_record()
+        if chat_record is None:
+            raise AppApiException(500, gettext('Conversation record does not exist'))
+
+        feedback_type = self.data.get('feedback_type')
+        content = self.data.get('content')
+
+        if not feedback_type:
+            raise AppApiException(500, gettext('Feedback type is required'))
+        if not content:
+            raise AppApiException(500, gettext('Feedback content is required'))
+
+        feedback_items = []
+        feedback_details = chat_record.details.get('feedback')
+        if isinstance(feedback_details, list):
+            feedback_items = feedback_details
+        elif isinstance(feedback_details, dict):
+            feedback_items = feedback_details.get('items') or []
+
+        feedback_data = {
+            'feedback_type': feedback_type,
+            'content': content,
+            'create_time': timezone.now().isoformat()
+        }
+        chat_record.details['feedback'] = {
+            'type': 'feedback-node',
+            'items': [*feedback_items, feedback_data]
+        }
+        chat_record.save()
+
+        application_access_token = QuerySet(ApplicationAccessToken).filter(
+            application_id=self.data.get('application_id')).first()
+        show_source = False
+        show_exec = False
+        if application_access_token is not None:
+            show_exec = application_access_token.show_exec
+            show_source = application_access_token.show_source
+        return ApplicationChatRecordQuerySerializers.reset_chat_record(
+            chat_record, show_source, show_exec)
+
 
 class ApplicationChatRecordQuerySerializers(serializers.Serializer):
     workspace_id = serializers.CharField(required=False, allow_null=True, allow_blank=True, label=_("Workspace ID"))
@@ -114,12 +160,14 @@ class ApplicationChatRecordQuerySerializers(serializers.Serializer):
     def reset_chat_record(chat_record, show_source, show_exec):
         knowledge_list = []
         paragraph_list = []
-        if 'search_step' in chat_record.details and chat_record.details.get('search_step').get(
+        if 'search_step' in chat_record.details and isinstance(chat_record.details.get('search_step'), dict) and chat_record.details.get('search_step').get(
                 'paragraph_list') is not None:
             paragraph_list = chat_record.details.get('search_step').get(
                 'paragraph_list')
 
         for item in chat_record.details.values():
+            if not isinstance(item, dict):
+                continue
             if item.get('type') == 'search-knowledge-node' and item.get('show_knowledge', False):
                 paragraph_list = paragraph_list + (item.get(
                     'paragraph_list') or [])
@@ -151,6 +199,7 @@ class ApplicationChatRecordQuerySerializers(serializers.Serializer):
         show_source_dict = {'knowledge_list': knowledge_list,
                             'paragraph_list': paragraph_list, }
         show_exec_dict = {'execution_details': [chat_record.details[key] for key in chat_record.details if
+                                                isinstance(chat_record.details[key], dict) and chat_record.details[key].get('type') != 'feedback-node' and
                                                 (True if show_exec else chat_record.details[key].get(
                                                     'type') == 'start-node')]}
         return {

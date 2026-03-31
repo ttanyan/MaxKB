@@ -49,8 +49,15 @@
       <el-button text disabled v-if="buttonData?.vote_status === '1'">
         <AppIcon iconName="app-oppose-color"></AppIcon>
       </el-button>
+      <el-divider direction="vertical" />
+      <el-tooltip effect="dark" :content="$t('views.chatLog.feedback.title')" placement="top">
+        <el-button text @click="openFeedback(data)">
+          <AppIcon iconName="app-feedback"></AppIcon>
+        </el-button>
+      </el-tooltip>
       <EditContentDialog ref="EditContentDialogRef" @refresh="refreshContent" />
       <EditMarkDialog ref="EditMarkDialogRef" @refresh="refreshMark" />
+      <FeedbackDialog ref="FeedbackDialogRef" @refresh="refreshFeedback" />
       <!-- 先渲染，不然不能播放   -->
       <audio ref="audioPlayer" v-for="item in audioList" :key="item" controls hidden="hidden"></audio>
     </div>
@@ -61,6 +68,7 @@ import { computed, onMounted, ref } from 'vue'
 import { copyClick } from '@/utils/clipboard'
 import EditContentDialog from '@/views/chat-log/component/EditContentDialog.vue'
 import EditMarkDialog from '@/views/chat-log/component/EditMarkDialog.vue'
+import FeedbackDialog from '@/views/chat-log/component/FeedbackDialog.vue'
 import { datetimeFormat } from '@/utils/time'
 import applicationApi from '@/api/application/application'
 import { useRoute } from 'vue-router'
@@ -103,6 +111,7 @@ const audioPlayer = ref<HTMLAudioElement[] | null>(null)
 
 const EditContentDialogRef = ref()
 const EditMarkDialogRef = ref()
+const FeedbackDialogRef = ref()
 
 const buttonData = ref(props.data)
 const loading = ref(false)
@@ -116,6 +125,19 @@ function editContent(data: any) {
 
 function editMark(data: any) {
   EditMarkDialogRef.value.open(data)
+}
+
+function openFeedback(data: any) {
+  FeedbackDialogRef.value.open({
+    ...data,
+    chat_id: data.chat_id || '',
+    application_id: props.applicationId,
+  })
+}
+
+function refreshFeedback(data: any) {
+  buttonData.value = data
+  emit('update:data', buttonData.value)
 }
 
 const audioPlayerStatus = ref(false)

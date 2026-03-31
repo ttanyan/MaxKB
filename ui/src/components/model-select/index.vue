@@ -120,7 +120,10 @@ function getProvider() {
   model
     .asyncGetProvider()
     .then((res: any) => {
-      providerOptions.value = res?.data
+      const excludedProviders = ['OpenAI', 'Azure OpenAI']
+      providerOptions.value = (res?.data || []).filter(
+        (provider: Provider) => !excludedProviders.includes(provider.name),
+      )
       loading.value = false
     })
     .catch(() => {

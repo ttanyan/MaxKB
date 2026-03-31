@@ -198,3 +198,22 @@ class ChatRecordView(APIView):
                 'application_id': request.auth.application_id,
                 'chat_user_id': request.auth.chat_user_id,
             }).one(False))
+
+    @extend_schema(
+        methods=['POST'],
+        description=_("Submit conversation feedback"),
+        summary=_("Submit conversation feedback"),
+        operation_id=_("Submit conversation feedback"),  # type: ignore
+        parameters=PageHistoricalConversationRecordAPI.get_parameters(),
+        responses=PageHistoricalConversationRecordAPI.get_response(),
+        tags=[_('Chat')]  # type: ignore
+    )
+    def post(self, request: Request, chat_id: str, chat_record_id: str):
+        return result.success(ChatRecordOperateSerializer(
+            data={
+                'chat_id': chat_id,
+                'chat_record_id': chat_record_id,
+                'application_id': request.auth.application_id,
+                'chat_user_id': request.auth.chat_user_id,
+                **request.data
+            }).feedback())

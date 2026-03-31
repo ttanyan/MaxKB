@@ -35,6 +35,7 @@
       :applicationId="application.id"
       :chatId="chatRecord.chat_id"
       :chat_loading="loading"
+      @update:data="(event: any) => emit('update:chatRecord', event)"
       @regeneration="regenerationChart(chatRecord)"
     />
   </div>

@@ -385,7 +385,19 @@ function toChat(row: any) {
     ? '?' + mapToUrlParams(apiInputParams.value)
     : ''
   ApplicationResourceApi.getAccessToken(row.id, loading).then((res: any) => {
-    window.open(application.location + res?.data?.access_token + apiParams)
+    if (res?.data?.is_active) {
+      window.open(application.location + res?.data?.access_token + apiParams)
+      return
+    }
+    const debugPreviewUrl = router.resolve({
+      name: 'AppSetting',
+      params: {
+        from: 'resource-management',
+        id: row.id,
+        type: row.type,
+      },
+    }).href
+    window.open(debugPreviewUrl)
   })
 }
 
