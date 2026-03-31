@@ -250,4 +250,5 @@ export default {
     emptyMessage2: 'No matching sections found',
   },
   publishTime: 'Publish Time',
+  chatLog: 'Chat Log',
 }

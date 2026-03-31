@@ -279,6 +279,13 @@
                               {{ $t('common.copy') }}
                             </el-dropdown-item>
                             <el-dropdown-item
+                              @click.stop="goChatLog(item)"
+                              v-if="hasChatLogPermission(item.id)"
+                            >
+                              <AppIcon iconName="app-operation" class="color-secondary"></AppIcon>
+                              {{ $t('views.application.chatLog') }}
+                            </el-dropdown-item>
+                            <el-dropdown-item
                               divided
                               @click.stop="exportApplication(item)"
                               v-if="permissionPrecise.export(item.id)"
@@ -512,7 +519,7 @@ const get_route = (item: any) => {
           [],
           'AND',
         ),
-        PermissionConst.APPLICATION_CHAT_LOG_READ.getWorkspacePermissionWorkspaceManageRole,
+        PermissionConst.APPLICATION_CHAT_LOG_READ.getWorkspacePermissionWorkspaceManageRole(),
         PermissionConst.APPLICATION_CHAT_LOG_READ.getApplicationWorkspaceResourcePermission(
           item.id,
         ),
@@ -520,7 +527,7 @@ const get_route = (item: any) => {
       'OR',
     )
   ) {
-    return `/application//workspace${item.id}/${item.type}/chat-log`
+    return `/application/workspace/${item.id}/${item.type}/chat-log`
   } else return `/application/`
 }
 
@@ -597,6 +604,28 @@ function settingApplication(row: any) {
   } else {
     router.push({ path: `/application/workspace/${row.id}/${row.type}/setting` })
   }
+}
+
+function goChatLog(row: any) {
+  router.push({ path: `/application/workspace/${row.id}/${row.type}/chat-log` })
+}
+
+function hasChatLogPermission(id: string) {
+  return hasPermission(
+    [
+      new ComplexPermission(
+        [RoleConst.USER],
+        [PermissionConst.APPLICATION.getApplicationWorkspaceResourcePermission(id)],
+        [],
+        'AND',
+      ),
+      PermissionConst.APPLICATION_CHAT_LOG_READ.getWorkspacePermissionWorkspaceManageRole(),
+      PermissionConst.APPLICATION_CHAT_LOG_READ.getApplicationWorkspaceResourcePermission(
+        id,
+      ),
+    ],
+    'OR',
+  )
 }
 
 function deleteApplication(row: any) {
