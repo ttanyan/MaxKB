@@ -11,3 +11,4 @@ from .system_setting import *
 from .log_management import *
 from .chat_user import *
 from .user_menu_setting import *
+from .access_control_policy import *
