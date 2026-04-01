@@ -335,5 +335,9 @@ docker run -d \
   -e MAXKB_REDIS_PASSWORD=your_redis_password \
   your_maxkb_image:tag
 ```
-
+应用相关 SQL（在 apps/application/sql/ 目录下）
+聊天记录统计、导出、查询等相关 SQL 脚本
+知识库相关 SQL（在 apps/knowledge/sql/ 目录下）
+搜索、文档管理、段落管理等 SQL 脚本
+公共模块 SQL（在 apps/common/sql/ 目录下）
 通过以上配置，您可以灵活地将 MaxKB 部署在 Docker 容器中，并实现数据库和存储的外挂，确保数据持久化和系统可靠性。

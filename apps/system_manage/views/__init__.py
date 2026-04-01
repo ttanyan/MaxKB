@@ -12,3 +12,4 @@ from .system_profile import *
 from .valid import *
 from .system_config import *
 from .menu_setting import *
+from .access_control_policy import *

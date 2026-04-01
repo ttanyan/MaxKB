@@ -54,7 +54,7 @@ COPY --from=stage-build /opt/py3 /opt/py3
 
 RUN chmod 755 /tmp
 
-EXPOSE 8080
+EXPOSE
 VOLUME /opt/maxkb
 ENTRYPOINT ["bash", "-c"]
 CMD [ "/usr/bin/start-all.sh" ]

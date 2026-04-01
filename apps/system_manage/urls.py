@@ -12,6 +12,10 @@ urlpatterns = [
     path('email_setting', views.SystemSetting.Email.as_view()),
     path('menu_setting', views.MenuSettingView.as_view()),
     path('menu_setting/current', views.CurrentMenuSettingView.as_view()),
+    path('access_control_policy', views.AccessControlPolicyView.as_view()),
+    path('access_control_policy/application_record', views.AccessControlPolicyApplicationRecordView.as_view()),
+    path('access_control_policy/<uuid:policy_id>', views.AccessControlPolicyDetailView.as_view()),
+    path('access_control_policy/<uuid:policy_id>/apply', views.AccessControlPolicyApplyView.as_view()),
     path('profile', views.SystemProfile.as_view()),
     path('valid/<str:valid_type>/<int:valid_count>', views.Valid.as_view()),
     path('config', views.get_system_config)
